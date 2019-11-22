@@ -1,0 +1,7 @@
+<search-form (doSearch)="passSearch($event)" (doClear)="passClear()" 
+  (showRes)="passResults()" (showFav)="passFavorites()" [changeToResults]="changeToResults">
+</search-form>
+
+<tab-results [isSearch]="isSearch" [isClear] = "isClear" (changeToResults)="changeTabResults()"
+  [isResults]= "isResults" [isFavorites] = "isFavorites" [formData]="formData">
+</tab-results>

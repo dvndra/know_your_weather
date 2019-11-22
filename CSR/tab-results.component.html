@@ -1,0 +1,345 @@
+<style>
+.marginAdjust{
+    margin-top:-3rem;
+}
+#currentCard{
+    background-color: #9CD1F1;
+}
+td{
+    width: 20%;
+}
+td img{
+    width:2em;
+}
+#seal,#icon{
+    width:30%; 
+    float:right;
+}
+#wthrsmry{
+    float:none;
+}
+#dailyWthrSmry{
+    float:none;
+}
+#modal_footer{
+    float:right;
+    background-color:#9CD1F1;
+    border-color: grey; 
+    padding-right:3em;
+}
+.yellow-icon {
+    color: yellow;
+    fill:yellow;
+}
+.orange-icon {
+    color: orange;
+    fill:orange;
+    background-color: white;
+}
+#favList th.mat-header-cell {
+  text-align: center;
+}
+
+#favList td {
+  text-align: center;
+}
+
+@media only screen and (max-width: 350px){
+    #currentCardTotal{
+        font-size:0.55em;
+    }
+}
+
+@media only screen and (max-width: 450px) and (min-width: 350px){
+    #currentCardTotal{
+        font-size:0.65em;
+    }
+}
+@media only screen and (min-width: 450px) and (max-width: 570px){
+    #currentCardTotal{
+        font-size:1em;
+    }
+}
+@media only screen and (min-width: 570px) and (max-width: 770px){
+    #currentCardTotal{
+        font-size:0.55em;
+    }
+}
+@media only screen and (min-width: 770px) and (max-width: 1000px){
+    #currentCardTotal{
+        font-size:0.8em;
+    }
+}
+
+</style>
+
+<div class="container-fluid" *ngIf="isResults&&!invalidAddress">
+        <!-- Weather Content Show *ngIf="isResults"-->
+        <div  class="row justify-content-center">
+            
+            <div class="col-sm-10 my-5">     
+                <span>       
+                <mat-button-toggle-group #group="matButtonToggleGroup" value="Current">
+                        <mat-button-toggle value="Current" style="font-size: 0.75em;" (click)="showCurrent()"> Current </mat-button-toggle>
+                        <mat-button-toggle value="Hourly" style="font-size: 0.75em;" (click)="showHourly()"> Hourly </mat-button-toggle>
+                        <mat-button-toggle value="Weekly" style="font-size: 0.75em;" (click)="showWeekly()"> Weekly </mat-button-toggle>
+                </mat-button-toggle-group>
+                </span>
+
+                <span style="float:right;display:block">
+                   <a class="twitter-share-button"
+                        [href]="twitterUrl"data-size="large"><img src="https://cdn2.iconfinder.com/data/icons/minimalism/512/twitter.png" style="height:50px;"/>
+                    </a>
+                    <mat-button-toggle value="Favorites" (click)="changeFav()"> <mat-icon *ngIf="!markedFav">star_border</mat-icon> 
+                        <mat-icon class="yellow-icon" *ngIf="markedFav">star</mat-icon> </mat-button-toggle>             
+                </span>   
+            </div>            
+        </div>
+</div>
+
+<div class="container-fluid" *ngIf="isResults&&!invalidAddress">
+        <div  class="row justify-content-center">           
+            <div class="col-sm-10 marginAdjust"> 
+                <mat-divider></mat-divider>
+            </div>
+        </div>
+</div>    
+ 
+<!-- Current Card -->
+<div class="container-fluid" *ngIf="isCurrent&&isResults&&!invalidAddress">
+        <div  class="row justify-content-center">           
+                <div class="card m-4 col-sm-5 border border-dark" id="currentCard">
+                    <div class="card-body" id="currentCardTotal">
+                        <div style="width:50%; float:left">
+                            <div class="row" style="font-size:1.5em">{{city}}</div>
+                            <div class="row" style="font-size:1.5em;color:#304947;">{{currData.timezone}}</div>
+                            <div class="row my-2" style="font-size:2em">
+                                {{currData.currently.temperature| number:'.0-0'}}&nbsp;
+                                <img class="my-2" style="width:0.6rem; height:0.6rem;" src="https://cdn3.iconfinder.com/data/icons/virtual-notebook/16/button_shape_oval-512.png">&nbsp;F
+                            </div>
+                            <div id="wthrsmry" class="row my-2" style="font-size:1.25em">{{currData.currently.summary}}</div>
+                        </div>
+                        <div id="seal" class="mt-4">
+                            <img width="70%" [src]="seal">
+                        </div>
+                        
+                        <table class="mt-5" style="font-size:0.9em" id="currWthr" width="100%">
+                            <tr>
+                                <td *ngIf="'humidity in currData.currently' && currData.currently.humidity">
+                                    <img src="https://cdn2.iconfinder.com/data/icons/weather-74/24/weather-16-512.png"  ngbTooltip="Humidity" placement="top">  
+                                </td>
+                                <td *ngIf="'pressure in currData.currently' && currData.currently.pressure">
+                                    <img src="https://cdn2.iconfinder.com/data/icons/weather-74/24/weather-25-512.png" ngbTooltip="Pressure" placement="top"> 
+                                </td>
+                                <td *ngIf="'windSpeed in currData.currently' && currData.currently.windSpeed">
+                                    <img src="https://cdn2.iconfinder.com/data/icons/weather-74/24/weather-27-512.png" ngbTooltip="WindSpeed" placement="top"> 
+                                </td>
+                                <td *ngIf="'visibility in currData.currently' && currData.currently.visibility">
+                                    <img src="https://cdn2.iconfinder.com/data/icons/weather-74/24/weather-30-512.png" ngbTooltip="Visibility" placement="top"> 
+                                </td>
+                                <td  *ngIf="'cloudCover in currData.currently' && currData.currently.cloudCover">
+                                    <img src="https://cdn2.iconfinder.com/data/icons/weather-74/24/weather-28-512.png" ngbTooltip="CloudCover" placement="top"> 
+                                </td >
+                                <td *ngIf="'ozone in currData.currently' && currData.currently.ozone">
+                                    <img src="https://cdn2.iconfinder.com/data/icons/weather-74/24/weather-24-512.png" ngbTooltip="Ozone" placement="top"> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td *ngIf="'humidity in currData.currently' && currData.currently.humidity">
+                                {{currData.currently.humidity}}   
+                                </td>
+                                <td *ngIf="'pressure in currData.currently' && currData.currently.pressure">
+                                    {{currData.currently.pressure}} 
+                                </td>
+                                <td *ngIf="'windSpeed in currData.currently' && currData.currently.windSpeed">
+                                    {{currData.currently.windSpeed}}
+                                </td>
+                                <td *ngIf="'visibility in currData.currently' && currData.currently.visibility">
+                                    {{currData.currently.visibility}}
+                                </td>
+                                <td  *ngIf="'cloudCover in currData.currently' && currData.currently.cloudCover">
+                                    {{currData.currently.cloudCover}}
+                                </td >
+                                <td *ngIf="'ozone in currData.currently' && currData.currently.ozone">
+                                    {{currData.currently.ozone}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+        </div>
+</div>
+
+<!-- Hourly Card  -->
+<div class="container-fluid" *ngIf="isHourly&&isResults&&!invalidAddress"> 
+        <form #hourlyForm="ngForm">    
+            <div class="form-group offset">
+            <select class="custom select col-sm-3 mx-1"  [(ngModel)] ="selectedLabel" name="showVar" 
+            id="showVar" (change)="plotHourlyChart()">
+                <option value="" Selected> Temperature </option>
+                <option value="pressure">Pressure </option>
+                <option value="humidity"> Humidity </option>
+                <option value="ozone">Ozone </option>
+                <option value="visibility"> Visibility </option>
+                <option value="windSpeed">WindSpeed </option>
+            </select>
+            </div>
+        </form> 
+        
+    <div class="row justify-content-center">
+        <div class="col-sm-8" id="hourlyCard">
+                <div style="display: block">
+                  <canvas baseChart
+                          [datasets]="barChartData"
+                          [labels]="barChartLabels"
+                          [options]="barChartOptions"
+                          legend="true"
+                          chartType="bar">
+                  </canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="example-selected-value">Selected value: {{hourlyForm.value.showVar}}</div> -->
+
+<!-- Weekly Card -->
+<div class="container-fluid" *ngIf="isWeekly&&isResults&&!invalidAddress">
+        <div class="row justify-content-center">
+                <div class="col-sm-8" id="hourlyCard">
+                        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                </div>    
+                
+        </div>    
+</div> 
+
+<!-- Modal -->
+<ng-template #myModal let-modal>
+        <div class="modal-header" style="background-color: #6592AD;border-color: grey;">
+            <h4 class="modal-title" id="modal-basic-title">{{dailyDate}}</h4>
+            <button type="button" style="outline:none" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" style="background-color: #9CD1F1;border-color: grey;">
+                <div class="card-body mb-2">
+                    <div style="width:65%; float:left">
+                        <div class="row" style="font-size: x-large;">{{city}}</div>
+                        <div class="row my-1" style="font-size: xx-large;">
+                            {{dailyData.currently.temperature| number:'.0-0'}}&nbsp;
+                            <img class="my-2" style="width:0.6rem; height:0.6rem;" src="https://cdn3.iconfinder.com/data/icons/virtual-notebook/16/button_shape_oval-512.png">&nbsp;F
+                        </div>
+                        <div id="dailyWthrSmry" class="row my-2" style="font-size:small">{{dailyData.currently.summary}}</div>
+                    </div>
+                    <div id="icon" class="mt-2">
+                        <img width="75%" [src]="dailyIcon">
+                    </div>
+                </div>
+        </div>
+        <div class="modal-footer" id="modal_footer">
+                <table style="font-size:small">
+                        <tr>
+                            <td *ngIf="'precipIntensity in dailyData.currently'">
+                                Precipitation&#58;&nbsp;{{dailyData.currently.precipIntensity | number:'.0-2'}}
+                            </td>
+                            <td *ngIf="'precipIntensity in dailyData.currently'==false">
+                                    Precipitation&#58;&nbsp;N/A
+                            </td>
+                        </tr>
+                        <tr>
+                            <td *ngIf="'precipProbability in dailyData.currently'">
+                                Chance&nbsp;of&nbsp;Rain&#58;&nbsp;{{dailyData.currently.precipProbability*100 | number:'.0-2'}}&nbsp;&#37;
+                            </td>
+                            <td *ngIf="'precipProbability in dailyData.currently'==false">
+                                    Chance&nbsp;of&nbsp;Rain&#58;&nbsp;N/A
+                            </td>
+                        </tr>
+                        <tr>
+                            <td *ngIf="'windSpeed in dailyData.currently'">
+                                Wind&nbsp;Speed&#58;&nbsp;{{dailyData.currently.windSpeed | number:'.0-2'}} &nbsp;mph
+                            </td>
+                            <td *ngIf="'windSpeed in dailyData.currently'==false">
+                                    Wind&nbsp;Speed&#58;&nbsp;N/A
+                            </td>
+                        </tr>
+                        <tr>
+                            <td *ngIf="'humidity in dailyData.currently'">
+                                Humidity&#58;&nbsp;{{dailyData.currently.humidity*100 | number:'.0-2'}}&nbsp;&#37;
+                            </td>
+                            <td *ngIf="'humidity in dailyData.currently'==false">
+                                    Humidity&#58;&nbsp;N/A
+                            </td>
+                        </tr>
+                        <tr>
+                            <td *ngIf="'visibility in dailyData.currently'">
+                                Visibility&#58;&nbsp;{{dailyData.currently.visibility | number:'.0-2'}} &nbsp;miles
+                            </td>
+                            <td *ngIf="'visibility in dailyData.currently'==false">
+                                    Visibility&#58;&nbsp;N/A
+                            </td>
+                        </tr>
+                </table>
+        </div>
+</ng-template>
+
+<div #clickModal class=" hide-style" id="clickModal" (click)="open(myModal)"></div>
+
+<div class="container-fluid" *ngIf="isFavorites&&favoriteList.length>0">
+        <div class="row justify-content-center mt-4" id="favTable">
+            <div class="col-sm-8" style="width:100%">
+                    <table mat-table id="favList" #favList [dataSource]="dataSource" style="width:100%" class="mat-elevation-z8">
+
+                    <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+                        
+                        <ng-container matColumnDef="#">
+                            <th mat-header-cell *matHeaderCellDef> &#35; </th>
+                            <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+                        </ng-container>
+                        
+                        <ng-container matColumnDef="City">
+                            <th mat-header-cell *matHeaderCellDef> City </th>
+                            <td mat-cell *matCellDef="let element"> <a style="cursor:pointer;color:blue">{{element.city}} </a></td>
+                        </ng-container>
+                        
+                        <ng-container matColumnDef="State">
+                            <th mat-header-cell *matHeaderCellDef> State </th>
+                            <td mat-cell *matCellDef="let element"> {{element.state}} </td>
+                        </ng-container>
+                        
+                        <ng-container matColumnDef="Image">
+                            <th mat-header-cell *matHeaderCellDef> Image</th>
+                            <td mat-cell *matCellDef="let element"> <img [src]="element.image" /> </td>
+                        </ng-container>
+                        
+                        <ng-container matColumnDef="Favorites">
+                        <th mat-header-cell  *matHeaderCellDef > Favorites </th>
+                        <td mat-cell *matCellDef="let row; let i=index" >
+                                <button mat-button > <mat-icon (click)="deleteFavorite(i)" class="orange-icon">delete</mat-icon></button>
+                        </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns" style="background-color: #6592AD;"></tr>
+                        <tr mat-row style="background-color: #9CD1F1;" (click)=test(row) *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+        </div>
+</div>
+
+<div class="container-fluid" *ngIf="isFavorites&&favoriteList.length===0">
+        <div class="row justify-content-center mt-4" id="favError">
+            <div class="col-sm-8" style="width:100%;font-size: 1em;">
+                <div class="alert alert-warning" role="alert">No Records
+                </div>
+            </div>
+        </div>
+</div>
+
+<div class="container-fluid" *ngIf="invalidAddress">
+        <div class="row justify-content-center mt-4" id="invalidAddress">
+            <div class="col-sm-8" style="width:100%;font-size: 1em;">
+                <div class="alert alert-warning" role="alert">Invalid Address
+                </div>
+            </div>
+        </div>
+</div>
