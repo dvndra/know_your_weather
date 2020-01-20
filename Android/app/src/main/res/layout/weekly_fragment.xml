@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    android:padding="8dp">
+    <android.support.v7.widget.CardView
+        android:id="@+id/weeklyCard"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginVertical="24dp"
+        app:cardCornerRadius="16dp"
+        app:cardBackgroundColor="#1E1E1E"
+        android:layout_marginHorizontal="16dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/weeklyIcon"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:src="@drawable/clear_day"
+                android:paddingLeft="32dp"/>
+            <TextView
+                android:id="@+id/weeklySummary"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:layout_margin="8dp"
+                android:paddingBottom="16dp"
+                android:textSize="20sp"
+                android:text=""
+                android:paddingHorizontal="8dp"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
+                android:maxLines="4"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/weeklyCard"
+        android:layout_alignParentBottom="true"/>
+
+
+</RelativeLayout>
