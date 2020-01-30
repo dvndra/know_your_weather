@@ -28,6 +28,6 @@ Click<a href="http://dvndra.us-east-2.elasticbeanstalk.com/"> here </a> to acces
 
 
 ## Android Application
-The code used to develop Android application will be added here on 3rd December.<br>
+Applied Google’s Material design rules to create Android app using Java. Please find below gif demonstrating some of the functionalities of the app on virtual Android Emulator.<br>
 
 <img src="http://dswami.freevar.com/git_icons/csci571_hw9.gif"><br>
